@@ -2,50 +2,35 @@
 function Contact(first, last) {
   this.firstName = first;
   this.lastName = last;
-  this.addresses = [];
+  this.accounts = [];
 }
 
-function Address(street, city, state) {
-  this.street = street;
-  this.city = city;
-  this.state = state;
+function BankAccount(initial, deposit, withdrawal, balance) {
+  this.initial = initial;
+  this.deposit = deposit;
+  this.withdrawal = withdrawal;
+  this.balance = balance;
 }
 
 Contact.prototype.fullName = function() {
   return this.firstName + " " + this.lastName;
 }
 
-Address.prototype.fullAddress = function() {
-  return this.street + ", " + this.city + ", " + this.state;
+BankAccount.prototype.fullAccount = function() {
+  return this.initial + ", " + this.deposit + ", " + this.withdrawal + "," + this.balance;
 }
 
 function resetFields() {
     $("input#new-first-name").val("");
     $("input#new-last-name").val("");
-    $("input.new-street").val("");
-    $("input.new-city").val("");
-    $("input.new-state").val("");
+    $("input.new-initial").val("");
+    $("input.new-deposit").val("");
+    $("input.new-withdrawal").val("");
+    $("input.new-balance").val("");
 }
 
 // user interface logic
 $(document).ready(function() {
-
-  $("#add-address").click(function() {
-    $("#new-addresses").append('<div class="new-address">' +
-                                 '<div class="form-group">' +
-                                   '<label for="new-street">Street</label>' +
-                                   '<input type="text" class="form-control new-street">' +
-                                 '</div>' +
-                                 '<div class="form-group">' +
-                                   '<label for="new-city">City</label>' +
-                                   '<input type="text" class="form-control new-city">' +
-                                 '</div>' +
-                                 '<div class="form-group">' +
-                                   '<label for="new-state">State</label>' +
-                                   '<input type="text" class="form-control new-state">' +
-                                 '</div>' +
-                               '</div>');
-  });
 
   $("form#new-contact").submit(function(event) {
     event.preventDefault();
@@ -54,24 +39,26 @@ $(document).ready(function() {
     var inputtedLastName = $("input#new-last-name").val();
     var newContact = new Contact(inputtedFirstName, inputtedLastName);
 
-    $(".new-address").each(function() {
-      var inputtedStreet = $(this).find("input.new-street").val();
-      var inputtedCity = $(this).find("input.new-city").val();
-      var inputtedState = $(this).find("input.new-state").val();
-      var newAddress = new Address(inputtedStreet, inputtedCity, inputtedState)
-      newContact.addresses.push(newAddress)
+    $(".new-account").each(function() {
+      var inputtedInitial = $(this).find("input.new-initial").val();
+      var inputtedDeposit = $(this).find("input.new-deposit").val();
+      var inputtedWithdrawal = $(this).find("input.new-withdrawal").val();
+      var inputtedBalance = $(this).find("input.new-balance").val();
+      var newAccount = new BankAccount(inputtedInitial, inputtedDeposit, inputtedWithdrawal, inputtedBalance);
+      newContact.accounts.push(newAccount)
     });
-
     $("ul#contacts").append("<li><span class='contact'>" + newContact.fullName() + "</span></li>");
+
+
 
     $(".contact").last().click(function() {
       $("#show-contact").show();
       $("#show-contact h2").text(newContact.fullName());
       $(".first-name").text(newContact.firstName);
       $(".last-name").text(newContact.lastName);
-      $("ul#addresses").text("");
-      newContact.addresses.forEach(function(address) {
-        $("ul#addresses").append("<li>" + address.fullAddress() + "</li>");
+      $("ul#accounts").text("");
+      newContact.accounts.forEach(function(BankAccount) {
+        $("ul#accounts").append("<li>" + BankAccount.fullAccount() + "</li>");
       });
     });
 

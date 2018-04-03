@@ -1,4 +1,5 @@
 //business logic
+
 function Contact(first, last) {
   this.firstName = first;
   this.lastName = last;
@@ -15,19 +16,21 @@ function BankAccount(initial, deposit, withdrawal, balance) {
 Contact.prototype.fullName = function() {
   return this.firstName + " " + this.lastName;
 }
-
 BankAccount.prototype.fullAccount = function() {
   return this.initial + ", " + this.deposit + ", " + this.withdrawal + "," + this.balance;
 }
 
-function resetFields() {
-    $("input#new-first-name").val("");
-    $("input#new-last-name").val("");
-    $("input.new-initial").val("");
-    $("input.new-deposit").val("");
-    $("input.new-withdrawal").val("");
-    $("input.new-balance").val("");
+var subtract = function(inputtedDeposit, inputtedWithdrawal){
+	return inputtedDeposit - inputtedWithdrawal;
 }
+// function resetFields() {
+//     $("input#new-first-name").val("");
+//     $("input#new-last-name").val("");
+//     $("input.new-initial").val("");
+//     $("input.new-deposit").val("");
+//     $("input.new-withdrawal").val("");
+//     $("input.new-balance").val("");
+// }
 
 // user interface logic
 $(document).ready(function() {
@@ -40,12 +43,17 @@ $(document).ready(function() {
     var newContact = new Contact(inputtedFirstName, inputtedLastName);
 
     $(".new-account").each(function() {
-      var inputtedInitial = $(this).find("input.new-initial").val();
-      var inputtedDeposit = $(this).find("input.new-deposit").val();
-      var inputtedWithdrawal = $(this).find("input.new-withdrawal").val();
+      var inputtedInitial = parseInt ($(this).find("input.new-initial").val());
+      var inputtedDeposit = parseInt ($(this).find("input.new-deposit").val());
+      var inputtedWithdrawal = parseInt ($(this).find("input.new-withdrawal").val());
       var inputtedBalance = $(this).find("input.new-balance").val();
       var newAccount = new BankAccount(inputtedInitial, inputtedDeposit, inputtedWithdrawal, inputtedBalance);
       newContact.accounts.push(newAccount)
+
+      var result = subtract (inputtedDeposit, inputtedWithdrawal);
+      		$("#Balance").text(result);
+
+
     });
     $("ul#contacts").append("<li><span class='contact'>" + newContact.fullName() + "</span></li>");
 
@@ -58,11 +66,11 @@ $(document).ready(function() {
       $(".last-name").text(newContact.lastName);
       $("ul#accounts").text("");
       newContact.accounts.forEach(function(BankAccount) {
-        $("ul#accounts").append("<li>" + BankAccount.fullAccount() + "</li>");
+        $("ul#accounts").append("<li>" + BankAccount.fullAccount() +"</li>");
       });
     });
 
-    resetFields();
+    //resetFields();
 
   });
 });
